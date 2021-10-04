@@ -9,6 +9,8 @@ import java.util.List;
 
 public class ProductCategoryDaoMem implements ProductCategoryDao {
 
+    private static final int DEFAULT_CATEGORY_INDEX = 0;
+
     private List<ProductCategory> data = new ArrayList<>();
     private static ProductCategoryDaoMem instance = null;
 
@@ -43,5 +45,9 @@ public class ProductCategoryDaoMem implements ProductCategoryDao {
     @Override
     public List<ProductCategory> getAll() {
         return data;
+    }
+
+    public ProductCategory getDefaultCategory() {
+        return data.get(DEFAULT_CATEGORY_INDEX);
     }
 }

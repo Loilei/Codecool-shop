@@ -4,6 +4,7 @@ import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
+import jdk.jfr.Category;
 
 import java.util.List;
 
@@ -25,5 +26,7 @@ public class ProductService{
         return productDao.getBy(category);
     }
 
-
+    public ProductCategory getDefaultCategory() {
+        return productCategoryDao.getDefaultCategory();
+    }
 }
