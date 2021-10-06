@@ -19,8 +19,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(urlPatterns = {"/"})
-public class ProductController extends HttpServlet {
+@WebServlet(urlPatterns = {"/category"})
+public class CategoryController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -31,19 +31,17 @@ public class ProductController extends HttpServlet {
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
 
-        ProductCategory defaultCategory = productService.getDefaultCategory();
+        String categoryName = req.getParameter("categoryName");
+        context.setVariable("categoryName", categoryName);
+        context.setVariable("categoryProducts", productDataStore.getAll());
 
-        context.setVariable("defaultCategory", defaultCategory);
-        context.setVariable("allProducts", productService.getAllProducts());
-        context.setVariable("productCategories", productCategoryDataStore.getAll());
-        context.setVariable("defaultCategoryProducts", productService.getProductsForCategory(defaultCategory.getId()));
 
         // // Alternative setting of the template context
         // Map<String, Object> params = new HashMap<>();
         // params.put("category", productCategoryDataStore.find(1));
         // params.put("products", productDataStore.getBy(productCategoryDataStore.find(1)));
         // context.setVariables(params);
-        engine.process("product/index.html", context, resp.getWriter());
+        engine.process("product/category.html", context, resp.getWriter());
     }
 
 }

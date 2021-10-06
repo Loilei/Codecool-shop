@@ -43,31 +43,29 @@
     <div class="col-1 ml-4">
 
         <div>
-            <h2>Categories</h2>
+            <h2>Suppliers</h2>
         </div>
-        <div>
-            <ul class="list-group">
-                <li th:each=" productCategory,iterStat : ${productCategories}"
-                    class="list-group-item d-flex justify-content-between align-items-center">
-                    <a th:href="@{/category(categoryName=${productCategory.getName()})}">
-                        <strong th:text="${productCategory.getName()}">Category Name</strong>
-                    </a>
-                    <span th:text="${productCategory.getProducts().size()}" class="badge bg-primary rounded-pill"
-                    >Amount</span>
-                </li>
-            </ul>
-        </div>
+<!--        <div>-->
+<!--            <ul class="list-group">-->
+<!--                <li th:each=" productCategory,iterStat : ${productCategories}"-->
+<!--                    class="list-group-item d-flex justify-content-between align-items-center"-->
+<!--                    th:text="${productCategory.getName()}">Category Name-->
+<!--                    <span th:text="${productCategory.getProducts().size()}" class="badge bg-primary rounded-pill"-->
+<!--                    >Amount</span>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
     </div>
 
 
     <div class="col mx-auto col-md-8">
 
         <div class="card">
-            <strong th:text="${defaultCategory.name}">Category Title</strong>
+            <strong th:text="${categoryName}">Category Title</strong>
         </div>
         <div class="row">
-            <div class="col col-sm-12 col-md-6 col-lg-4" th:each="prod,iterStat : ${defaultCategoryProducts}">
-                <div class="card">
+            <div class="col col-sm-12 col-md-6 col-lg-4" th:each="prod,iterStat : ${categoryProducts}">
+                <div class="card" th:if="${prod.getProductCategory().getName() == categoryName}">
                     <img class="" src="http://placehold.it/400x250/000/fff"
                          th:attr="src='/static/img/product_' + ${prod.id} + '.jpg'" alt=""/>
                     <div class="card-header">
@@ -85,38 +83,7 @@
                 </div>
             </div>
         </div>
-
-        <div th:each="productCategory : ${productCategories}">
-            <div th:if="${productCategory.getName() != defaultCategory.getName()}">
-                <div class="card">
-                    <strong th:text="${productCategory.name}">Category Title</strong>
-                </div>
-                <div class="row">
-                    <div class="col col-sm-12 col-md-6 col-lg-4" th:each="prod,iterStat : ${allProducts}">
-                        <div th:if="${prod.getProductCategory().getName() == productCategory.getName()}">
-                            <div class="card">
-                                <img class="" src="http://placehold.it/400x250/000/fff"
-                                     th:attr="src='/static/img/product_' + ${prod.id} + '.jpg'" alt=""/>
-                                <div class="card-header">
-                                    <h4 class="card-title" th:text="${prod.name}">Product name</h4>
-                                    <p class="card-text" th:text="${prod.description}">Product description... </p>
-                                </div>
-                                <div class="card-body">
-                                    <div class="card-text">
-                                        <p class="lead" th:text="${prod.getPrice()}">100 USD</p>
-                                    </div>
-                                    <div class="card-text">
-                                        <a class="btn btn-success" href="#">Add to cart</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
-
 </div>
 
 <div th:replace="footer.html :: copy"></div>

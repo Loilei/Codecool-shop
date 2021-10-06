@@ -29,4 +29,8 @@ public class ProductService{
     public ProductCategory getDefaultCategory() {
         return productCategoryDao.getDefaultCategory();
     }
+
+    public List<Product> getAllProducts() {
+        return productDao.getAll();
+    }
 }
