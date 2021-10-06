@@ -54,7 +54,7 @@ public class Initializer implements ServletContextListener {
         productCategoryDataStore.add(mice);
         ProductCategory keyboard = new ProductCategory("Keyboard", "Hardware", "A keyboard. Click, click.");
         productCategoryDataStore.add(keyboard);
-        ProductCategory monitorCable = new ProductCategory("MonitorCable", "Hardware", "Plug your monitor and start using it.");
+        ProductCategory monitorCable = new ProductCategory("Monitor Cable", "Hardware", "Plug your monitor and start using it.");
         productCategoryDataStore.add(monitorCable);
         ProductCategory monitor = new ProductCategory("Monitor", "Hardware", "Will show you the world once plugged.");
         productCategoryDataStore.add(monitor);
