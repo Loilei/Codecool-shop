@@ -2,9 +2,13 @@ package com.codecool.shop.controller;
 
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
+import com.codecool.shop.dao.SupplierDao;
 import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
 import com.codecool.shop.dao.implementation.ProductDaoMem;
+import com.codecool.shop.dao.implementation.SupplierDaoMem;
+import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
+import com.codecool.shop.model.Supplier;
 import com.codecool.shop.service.ProductService;
 import com.codecool.shop.config.TemplateEngineUtil;
 import org.thymeleaf.TemplateEngine;
@@ -16,8 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @WebServlet(urlPatterns = {"/category"})
 public class CategoryController extends HttpServlet {
@@ -26,14 +29,29 @@ public class CategoryController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ProductDao productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
-        ProductService productService = new ProductService(productDataStore,productCategoryDataStore);
+        ProductService productService = new ProductService(productDataStore, productCategoryDataStore);
+        SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
+
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
 
         String categoryName = req.getParameter("categoryName");
+
+
+        List<Supplier> suppliersList = new ArrayList<>();
+
+        for (Product product : productDataStore.getAll()) {
+            if (Objects.equals(categoryName, product.getProductCategory().getName())) {
+                if (!suppliersList.contains(product.getSupplier())) {
+                    suppliersList.add(product.getSupplier());
+                }
+            }
+        }
+        context.setVariable("suppliersList", suppliersList);
         context.setVariable("categoryName", categoryName);
         context.setVariable("categoryProducts", productDataStore.getAll());
+        context.setVariable("suppliersNames", supplierDataStore.getAll());
 
 
         // // Alternative setting of the template context
