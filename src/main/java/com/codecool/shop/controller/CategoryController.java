@@ -95,8 +95,6 @@ public class CategoryController extends HttpServlet {
             }
         }
 
-
-
         context.setVariable("suppliersList", suppliersList);
         context.setVariable("categoryName", categoryName);
         //todo
