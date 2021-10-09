@@ -45,26 +45,22 @@
         <div>
             <h2>Suppliers</h2>
         </div>
+        <br>
 
         <div class="form-check">
-            <div th:each="supplier,iterStat : ${suppliersList}">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+            <form action="" method="post">
+                <div th:each="supplier,iterStat : ${suppliersList}">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                           th:name="${supplier.getName()}">
                     <label class="form-check-label" for="flexCheckDefault" th:text="${supplier.getName()}">
                         Default checkbox
                     </label>
-            </div>
-        </div>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary btn-sm">Search</button>
+            </form>
 
-        <!--        <div>-->
-        <!--            <ul class="list-group">-->
-        <!--                <li th:each=" productCategory,iterStat : ${productCategories}"-->
-        <!--                    class="list-group-item d-flex justify-content-between align-items-center"-->
-        <!--                    th:text="${productCategory.getName()}">Category Name-->
-        <!--                    <span th:text="${productCategory.getProducts().size()}" class="badge bg-primary rounded-pill"-->
-        <!--                    >Amount</span>-->
-        <!--                </li>-->
-        <!--            </ul>-->
-        <!--        </div>-->
+        </div>
     </div>
 
 
@@ -74,8 +70,9 @@
             <strong th:text="${categoryName}">Category Title</strong>
         </div>
         <div class="row">
-            <div class="col col-sm-12 col-md-6 col-lg-4" th:each="prod,iterStat : ${categoryProducts}">
-                <div class="card" th:if="${prod.getProductCategory().getName() == categoryName}">
+            <div class="col col-sm-12 col-md-6 col-lg-4" th:each="prod,iterStat : ${categoryProducts}"
+                 th:if="${(prod.getProductCategory().getName() == categoryName) && (filteredSuppliers.contains(prod.getSupplier()))}">
+                <div class="card">
                     <img class="" src="http://placehold.it/400x250/000/fff"
                          th:attr="src='/static/img/product_' + ${prod.id} + '.jpg'" alt=""/>
                     <div class="card-header">

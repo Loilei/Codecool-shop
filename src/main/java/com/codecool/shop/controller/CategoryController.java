@@ -32,12 +32,10 @@ public class CategoryController extends HttpServlet {
         ProductService productService = new ProductService(productDataStore, productCategoryDataStore);
         SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
 
-
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
 
         String categoryName = req.getParameter("categoryName");
-
 
         List<Supplier> suppliersList = new ArrayList<>();
 
@@ -48,10 +46,12 @@ public class CategoryController extends HttpServlet {
                 }
             }
         }
+
         context.setVariable("suppliersList", suppliersList);
         context.setVariable("categoryName", categoryName);
         context.setVariable("categoryProducts", productDataStore.getAll());
         context.setVariable("suppliersNames", supplierDataStore.getAll());
+        context.setVariable("filteredSuppliers", supplierDataStore.getAll());
 
 
         // // Alternative setting of the template context
@@ -59,6 +59,50 @@ public class CategoryController extends HttpServlet {
         // params.put("category", productCategoryDataStore.find(1));
         // params.put("products", productDataStore.getBy(productCategoryDataStore.find(1)));
         // context.setVariables(params);
+        engine.process("product/category.html", context, resp.getWriter());
+    }
+
+    @Override
+    public void doPost(HttpServletRequest req,
+                       HttpServletResponse resp)	throws ServletException, IOException {
+
+        ProductDao productDataStore = ProductDaoMem.getInstance();
+        ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
+        ProductService productService = new ProductService(productDataStore, productCategoryDataStore);
+        SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
+
+        TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
+        WebContext context = new WebContext(req, resp, req.getServletContext());
+
+        String categoryName = req.getParameter("categoryName");
+
+        List<Supplier> suppliersList = new ArrayList<>();
+
+        for (Product product : productDataStore.getAll()) {
+            if (Objects.equals(categoryName, product.getProductCategory().getName())) {
+                if (!suppliersList.contains(product.getSupplier())) {
+                    suppliersList.add(product.getSupplier());
+                }
+            }
+        }
+
+        Map<String, String[]> selectedCheckboxes = req.getParameterMap();
+        List<Supplier> selectedSuppliers = new ArrayList<>();
+
+        for (Supplier supplier : suppliersList) {
+            if(selectedCheckboxes.containsKey(supplier.getName())) {
+                selectedSuppliers.add(supplier);
+            }
+        }
+
+
+
+        context.setVariable("suppliersList", suppliersList);
+        context.setVariable("categoryName", categoryName);
+        //todo
+        context.setVariable("categoryProducts", productDataStore.getAll());
+        context.setVariable("filteredSuppliers", selectedSuppliers);
+
         engine.process("product/category.html", context, resp.getWriter());
     }
 
