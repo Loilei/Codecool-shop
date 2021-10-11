@@ -1,20 +1,29 @@
 package com.codecool.shop.service;
 
+import com.codecool.shop.dao.CartDao;
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
+import com.codecool.shop.dao.SupplierDao;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
 import jdk.jfr.Category;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 
 public class ProductService{
     private ProductDao productDao;
     private ProductCategoryDao productCategoryDao;
+    private CartDao cartDao;
+    private SupplierDao supplierDao;
 
-    public ProductService(ProductDao productDao, ProductCategoryDao productCategoryDao) {
+    public ProductService(ProductDao productDao, ProductCategoryDao productCategoryDao,
+                          CartDao cartDao, SupplierDao supplierDao) {
         this.productDao = productDao;
         this.productCategoryDao = productCategoryDao;
+        this.cartDao = cartDao;
+        this.supplierDao = supplierDao;
     }
 
     public ProductCategory getProductCategory(int categoryId){
@@ -32,5 +41,29 @@ public class ProductService{
 
     public List<Product> getAllProducts() {
         return productDao.getAll();
+    }
+
+    public List<Product> getProductsFromCart(){
+        return cartDao.getAll();
+    }
+
+    public int getProductsAmountFromCart() {
+        return cartDao.getAll().size();
+    }
+
+    public Product getProductbyId(int id) {
+        return productDao.find(id);
+    }
+
+    public void addToCart(Product product) {
+        cartDao.add(product);
+    }
+
+    public BigDecimal getTotalPrice() {
+        return cartDao.getTotalSum();
+    }
+
+    public HashMap<Product, Integer> getProductsAndQuantities() {
+        return cartDao.getProductQuantities();
     }
 }

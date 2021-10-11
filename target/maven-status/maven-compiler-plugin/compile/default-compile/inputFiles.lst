@@ -10,7 +10,11 @@ C:\Users\marce\Desktop\Codecool-shop\src\main\java\com\codecool\shop\config\Thym
 C:\Users\marce\Desktop\Codecool-shop\src\main\java\com\codecool\shop\config\Initializer.java
 C:\Users\marce\Desktop\Codecool-shop\src\main\java\com\codecool\shop\controller\ProductController.java
 C:\Users\marce\Desktop\Codecool-shop\src\main\java\com\codecool\shop\dao\implementation\ProductCategoryDaoMem.java
+C:\Users\marce\Desktop\Codecool-shop\src\main\java\com\codecool\shop\dao\implementation\CartDaoMem.java
 C:\Users\marce\Desktop\Codecool-shop\src\main\java\com\codecool\shop\dao\implementation\ProductDaoMem.java
+C:\Users\marce\Desktop\Codecool-shop\src\main\java\com\codecool\shop\controller\CartController.java
+C:\Users\marce\Desktop\Codecool-shop\src\main\java\com\codecool\shop\dao\CartDao.java
 C:\Users\marce\Desktop\Codecool-shop\src\main\java\com\codecool\shop\dao\ProductDao.java
 C:\Users\marce\Desktop\Codecool-shop\src\main\java\com\codecool\shop\model\BaseModel.java
 C:\Users\marce\Desktop\Codecool-shop\src\main\java\com\codecool\shop\service\ProductService.java
+C:\Users\marce\Desktop\Codecool-shop\src\main\java\com\codecool\shop\model\Cart.java

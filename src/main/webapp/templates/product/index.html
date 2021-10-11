@@ -32,17 +32,7 @@
 
 <body>
 
-<nav class="navbar navbar-dark bg-primary sticky-top">
-    <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1">Codecool Shop</span>
-        <button class="btn btn-light" type="submit">Shopping Cart  <span class="badge bg-primary rounded-pill">
-                        0</span></button>
-    </div>
-</nav>
-
-<div class="jumbotron text-center">
-    <h1><a href="/" style="text-decoration: none">Codecool Shop</a></h1>
-</div>
+<div th:replace="navbar.html :: copy"></div>
 
 <div id="mainContainer" class="row m-auto">
     <!--    <div id="defaultProducts" class="row">-->
@@ -87,7 +77,11 @@
                             <p class="lead" th:text="${prod.getPrice()}">100 USD</p>
                         </div>
                         <div class="card-text">
-                            <a class="btn btn-success" href="#">Add to cart</a>
+                            <form action="" method="post">
+                                <button class="btn btn-success" type="submit" name="productId"
+                                        th:value="${prod.getId()}">Add to cart
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -114,7 +108,11 @@
                                         <p class="lead" th:text="${prod.getPrice()}">100 USD</p>
                                     </div>
                                     <div class="card-text">
-                                        <a class="btn btn-success" href="#">Add to cart</a>
+                                        <form action="" method="post">
+                                            <button class="btn btn-success" type="submit" name="productId"
+                                                    th:value="${prod.getId()}">Add to cart
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
