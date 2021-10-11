@@ -106,7 +106,7 @@
                                         <p class="lead" th:text="${prod.getPrice()}">100 USD</p>
                                     </div>
                                     <div class="card-text">
-                                        <a class="btn btn-success" href="#">Add to cart</a>
+                                        <a class="btn btn-success" href="#" data-th-attr="data-product-id=${prod.id}">Add to cart</a>
                                     </div>
                                 </div>
                             </div>
@@ -120,6 +120,9 @@
 </div>
 
 <div th:replace="footer.html :: copy"></div>
+<!--<script type="module" src="C:\Users\Marianna\Desktop\OOP - Java\Codecool-shop\src\main\webapp\static\js\main.js" defer></script>-->
+<script type="text/javascript" th:src="@{static/js/main.js}" defer></script>
 
 </body>
+
 </html>
