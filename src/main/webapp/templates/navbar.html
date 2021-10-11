@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="copy">
+    <nav class="navbar navbar-dark bg-primary sticky-top">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Codecool Shop</span>
+            <button class="btn btn-light" type="submit"><a href="/cart">Shopping Cart <span
+                    class="badge bg-danger rounded-pill" th:text="${numberOfProductsInCart}">
+            Amount</span> </a></button>
+        </div>
+    </nav>
+
+    <div class="jumbotron text-center">
+        <h1><a href="/" style="text-decoration: none">Codecool Shop</a></h1>
+    </div>
+</div>
+
+</body>
+</html>

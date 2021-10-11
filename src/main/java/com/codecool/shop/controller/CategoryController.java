@@ -1,8 +1,10 @@
 package com.codecool.shop.controller;
 
+import com.codecool.shop.dao.CartDao;
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.dao.SupplierDao;
+import com.codecool.shop.dao.implementation.CartDaoMem;
 import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
 import com.codecool.shop.dao.implementation.ProductDaoMem;
 import com.codecool.shop.dao.implementation.SupplierDaoMem;
@@ -29,8 +31,10 @@ public class CategoryController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ProductDao productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
-        ProductService productService = new ProductService(productDataStore, productCategoryDataStore);
         SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
+        CartDao cartDataStore = CartDaoMem.getInstance();
+        ProductService productService = new ProductService(productDataStore, productCategoryDataStore,
+                cartDataStore, supplierDataStore);
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
@@ -52,6 +56,7 @@ public class CategoryController extends HttpServlet {
         context.setVariable("categoryProducts", productDataStore.getAll());
         context.setVariable("suppliersNames", supplierDataStore.getAll());
         context.setVariable("filteredSuppliers", supplierDataStore.getAll());
+        context.setVariable("numberOfProductsInCart", productService.getProductsAmountFromCart());
 
 
         // // Alternative setting of the template context
@@ -68,8 +73,10 @@ public class CategoryController extends HttpServlet {
 
         ProductDao productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
-        ProductService productService = new ProductService(productDataStore, productCategoryDataStore);
         SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
+        CartDao cartDataStore = CartDaoMem.getInstance();
+        ProductService productService = new ProductService(productDataStore, productCategoryDataStore,
+                cartDataStore, supplierDataStore);
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
@@ -95,11 +102,19 @@ public class CategoryController extends HttpServlet {
             }
         }
 
+        String addedProductIdString = req.getParameter("productId");
+        if (!(addedProductIdString == null)) {
+            int addedProductId = Integer.parseInt(req.getParameter("productId"));
+            Product addedProduct = productService.getProductbyId(addedProductId);
+            productService.addToCart(addedProduct);
+            selectedSuppliers = suppliersList;
+        }
+
         context.setVariable("suppliersList", suppliersList);
         context.setVariable("categoryName", categoryName);
-        //todo
         context.setVariable("categoryProducts", productDataStore.getAll());
         context.setVariable("filteredSuppliers", selectedSuppliers);
+        context.setVariable("numberOfProductsInCart", productService.getProductsAmountFromCart());
 
         engine.process("product/category.html", context, resp.getWriter());
     }
