@@ -79,7 +79,7 @@
                             <p class="lead" th:text="${prod.getPrice()}">100 USD</p>
                         </div>
                         <div class="card-text">
-                            <a class="btn btn-success" href="#">Add to cart</a>
+                            <a class="btn btn-success" href="#" th:attr="data-product-id=${prod.id}">Add to cart</a>
                         </div>
                     </div>
                 </div>
@@ -106,7 +106,7 @@
                                         <p class="lead" th:text="${prod.getPrice()}">100 USD</p>
                                     </div>
                                     <div class="card-text">
-                                        <a class="btn btn-success" href="#" data-th-attr="data-product-id=${prod.id}">Add to cart</a>
+                                        <a class="btn btn-success" href="#" th:attr="data-product-id=${prod.id}">Add to cart</a>
                                     </div>
                                 </div>
                             </div>

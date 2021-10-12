@@ -8,9 +8,12 @@ function addToCart() {
         console.log(button)
         button.addEventListener("click", async function () {
             console.log("Working")
-            // let productId = button.getAttribute("data-product-id")
-            let productId = 10;
+            console.log(button)
+
+            let productId = button.getAttribute("data-product-id")
+            // let productId = 10;
             console.log(productId);
+            debugger;
             await addToCartRequest({productId: productId});
             //change number for cart on navbar
         })
@@ -31,5 +34,4 @@ async function apiPost2(url, payload) {
 }
 async function addToCartRequest(productId) {
     let response = await apiPost2('/cart', productId)
-    return response
-}
+    return response}
