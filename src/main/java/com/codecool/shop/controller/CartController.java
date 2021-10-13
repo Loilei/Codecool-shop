@@ -42,7 +42,7 @@ public class CartController extends HttpServlet {
         WebContext context = new WebContext(req, resp, req.getServletContext());
 
 
-        context.setVariable("productsInCart", productService.getProductsFromCart());
+        context.setVariable("productsInCart", productService.getSingularProductsFromCart());
         context.setVariable("numberOfProductsInCart", productService.getProductsAmountFromCart());
         context.setVariable("totalPrice", productService.getTotalPrice());
         context.setVariable("productsAndQuantities", productService.getProductsAndQuantities());
@@ -65,17 +65,13 @@ public class CartController extends HttpServlet {
         WebContext context = new WebContext(req, resp, req.getServletContext());
 
         String quantityString = req.getParameter("quantity");
-        if (!(quantityString == null)) {
-            int quantity = Integer.parseInt(req.getParameter("quantity"));
-            //todo
-            HashMap<Product, Integer> productsAndQuantities = productService.getProductsAndQuantities();
-
-        }
+        productService.updateCart(req, quantityString);
 
         String productToRemoveFromCartIdString = req.getParameter("productId");
-        productService.removeProductFromCart(req, productService, productToRemoveFromCartIdString);
+        productService.removeProductFromCart(req, productToRemoveFromCartIdString);
 
-        context.setVariable("productsInCart", productService.getProductsFromCart());
+
+        context.setVariable("productsInCart", productService.getSingularProductsFromCart());
         context.setVariable("numberOfProductsInCart", productService.getProductsAmountFromCart());
         context.setVariable("totalPrice", productService.getTotalPrice());
         context.setVariable("productsAndQuantities", productService.getProductsAndQuantities());

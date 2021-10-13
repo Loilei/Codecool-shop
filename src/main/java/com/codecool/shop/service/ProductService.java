@@ -10,10 +10,11 @@ import jdk.jfr.Category;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ProductService{
+public class ProductService {
     private ProductDao productDao;
     private ProductCategoryDao productCategoryDao;
     private CartDao cartDao;
@@ -27,11 +28,11 @@ public class ProductService{
         this.supplierDao = supplierDao;
     }
 
-    public ProductCategory getProductCategory(int categoryId){
+    public ProductCategory getProductCategory(int categoryId) {
         return productCategoryDao.find(categoryId);
     }
 
-    public List<Product> getProductsForCategory(int categoryId){
+    public List<Product> getProductsForCategory(int categoryId) {
         var category = productCategoryDao.find(categoryId);
         return productDao.getBy(category);
     }
@@ -44,8 +45,18 @@ public class ProductService{
         return productDao.getAll();
     }
 
-    public List<Product> getProductsFromCart(){
+    public List<Product> getProductsFromCart() {
         return cartDao.getAll();
+    }
+
+    public List<Product> getSingularProductsFromCart() {
+        List<Product> productsList = new ArrayList<>();
+        for (Product product : getProductsFromCart()) {
+            if (!productsList.contains(product)) {
+                productsList.add(product);
+            }
+        }
+        return productsList;
     }
 
     public int getProductsAmountFromCart() {
@@ -72,11 +83,34 @@ public class ProductService{
         cartDao.remove(product);
     }
 
-    public void removeProductFromCart(HttpServletRequest req, ProductService productService, String productToRemoveFromCartIdString) {
+    public void removeProductFromCart(HttpServletRequest req, String productToRemoveFromCartIdString) {
         if (!(productToRemoveFromCartIdString == null)) {
             int productToRemoveFromCartId = Integer.parseInt(productToRemoveFromCartIdString);
-            Product productToRemove = productService.getProductbyId(productToRemoveFromCartId);
-            productService.removeFromCart(productToRemove);
+            Product productToRemove = getProductbyId(productToRemoveFromCartId);
+            removeFromCart(productToRemove);
+        }
+    }
+
+    public void updateCart(HttpServletRequest req, String quantityString) {
+        if (!(quantityString == null)) {
+            int quantity = Integer.parseInt(req.getParameter("quantity"));
+            int productId = Integer.parseInt(req.getParameter("updatedProductId"));
+            Product product = getProductbyId(productId);
+            if (quantity <= 0) {
+                removeItemsFromCartbyId(productId, product);
+            } else {
+                removeItemsFromCartbyId(productId, product);
+                for (int i = 0; i < quantity; i++) {
+                    addToCart(product);
+                }
+            }
+        }
+    }
+
+    private void removeItemsFromCartbyId(int productId, Product product) {
+        int numberOfRemovedItems = getProductsAndQuantities().get(product);
+        for (int i = 0; i < numberOfRemovedItems; i++) {
+            cartDao.remove(product);
         }
     }
 }

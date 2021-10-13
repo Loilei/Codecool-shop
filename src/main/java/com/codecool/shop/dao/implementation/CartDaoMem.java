@@ -58,8 +58,8 @@ public class CartDaoMem implements CartDao {
     }
     //todo set product
 
-    @Override
-    public void setProductsQuantites(HashMap<Product, Integer> currentProductsandQuantities) {
+//    @Override
+//    public void setProductsQuantites(HashMap<Product, Integer> currentProductsAndQuantities, int quantityToSet, int productId) {
+//        currentProductsAndQuantities.put()
 
-    }
 }
