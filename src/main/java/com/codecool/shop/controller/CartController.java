@@ -42,7 +42,7 @@ public class CartController extends HttpServlet {
         WebContext context = new WebContext(req, resp, req.getServletContext());
 
 
-        context.setVariable("productsInCart", productService.getProductsFromCart());
+        context.setVariable("productsInCart", productService.getSingularProductsFromCart());
         context.setVariable("numberOfProductsInCart", productService.getProductsAmountFromCart());
         context.setVariable("totalPrice", productService.getTotalPrice());
         context.setVariable("productsAndQuantities", productService.getProductsAndQuantities());
@@ -63,6 +63,18 @@ public class CartController extends HttpServlet {
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
+
+        String quantityString = req.getParameter("quantity");
+        productService.updateCart(req, quantityString);
+
+        String productToRemoveFromCartIdString = req.getParameter("productId");
+        productService.removeProductFromCart(req, productToRemoveFromCartIdString);
+
+
+        context.setVariable("productsInCart", productService.getSingularProductsFromCart());
+        context.setVariable("numberOfProductsInCart", productService.getProductsAmountFromCart());
+        context.setVariable("totalPrice", productService.getTotalPrice());
+        context.setVariable("productsAndQuantities", productService.getProductsAndQuantities());
 
         engine.process("product/cart.html", context, resp.getWriter());
     }
