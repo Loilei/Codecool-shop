@@ -64,6 +64,22 @@ public class CartController extends HttpServlet {
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
 
+        String quantityString = req.getParameter("quantity");
+        if (!(quantityString == null)) {
+            int quantity = Integer.parseInt(req.getParameter("quantity"));
+            //todo
+            HashMap<Product, Integer> productsAndQuantities = productService.getProductsAndQuantities();
+
+        }
+
+        String productToRemoveFromCartIdString = req.getParameter("productId");
+        productService.removeProductFromCart(req, productService, productToRemoveFromCartIdString);
+
+        context.setVariable("productsInCart", productService.getProductsFromCart());
+        context.setVariable("numberOfProductsInCart", productService.getProductsAmountFromCart());
+        context.setVariable("totalPrice", productService.getTotalPrice());
+        context.setVariable("productsAndQuantities", productService.getProductsAndQuantities());
+
         engine.process("product/cart.html", context, resp.getWriter());
     }
 

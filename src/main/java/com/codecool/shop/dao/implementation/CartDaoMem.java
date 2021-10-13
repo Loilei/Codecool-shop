@@ -56,4 +56,10 @@ public class CartDaoMem implements CartDao {
         }
         return productsQuantities;
     }
+    //todo set product
+
+    @Override
+    public void setProductsQuantites(HashMap<Product, Integer> currentProductsandQuantities) {
+
+    }
 }

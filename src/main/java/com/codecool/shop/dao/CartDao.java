@@ -13,5 +13,5 @@ public interface CartDao {
     List<Product> getAll();
     BigDecimal getTotalSum();
     HashMap<Product, Integer> getProductQuantities();
-
+    void setProductsQuantites(HashMap<Product, Integer> currentProductsAndQuantities);
 }

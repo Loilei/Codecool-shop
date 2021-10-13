@@ -8,6 +8,7 @@ import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
 import jdk.jfr.Category;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
@@ -65,5 +66,17 @@ public class ProductService{
 
     public HashMap<Product, Integer> getProductsAndQuantities() {
         return cartDao.getProductQuantities();
+    }
+
+    public void removeFromCart(Product product) {
+        cartDao.remove(product);
+    }
+
+    public void removeProductFromCart(HttpServletRequest req, ProductService productService, String productToRemoveFromCartIdString) {
+        if (!(productToRemoveFromCartIdString == null)) {
+            int productToRemoveFromCartId = Integer.parseInt(productToRemoveFromCartIdString);
+            Product productToRemove = productService.getProductbyId(productToRemoveFromCartId);
+            productService.removeFromCart(productToRemove);
+        }
     }
 }
