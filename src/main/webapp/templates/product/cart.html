@@ -85,6 +85,15 @@
             <td colspan="5">Total Price</td>
             <td th:text="${totalPrice}">Total Price</td>
         </tr>
+        <tr></tr>
+        <td colspan="5">
+            <td>
+            <form action="/checkout" method="post">
+                <button class="btn btn-success" type="submit" name="checkout">Checkout</button>
+            </form>
+            </td>
+        </td>
+        </tr>
         </tbody>
     </table>
 
