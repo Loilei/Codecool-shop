@@ -2,6 +2,7 @@ package com.codecool.shop.controller;
 
 import com.codecool.shop.dao.*;
 import com.codecool.shop.dao.implementation.*;
+import com.codecool.shop.model.Order;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
 import com.codecool.shop.model.Supplier;
@@ -18,12 +19,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
-@WebServlet(urlPatterns = {"/cart"})
-public class CartController extends HttpServlet {
+@WebServlet(urlPatterns = {"/checkout"})
+public class CheckoutController extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ProductDao productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
         SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
@@ -32,17 +32,14 @@ public class CartController extends HttpServlet {
         ProductService productService = new ProductService(productDataStore, productCategoryDataStore,
                 cartDataStore, supplierDataStore, orderDataStore);
 
-
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
 
+        Order order = new Order(productService.getProductsFromCart());
 
-        context.setVariable("productsInCart", productService.getSingularProductsFromCart());
         context.setVariable("numberOfProductsInCart", productService.getProductsAmountFromCart());
-        context.setVariable("totalPrice", productService.getTotalPrice());
-        context.setVariable("productsAndQuantities", productService.getProductsAndQuantities());
 
-        engine.process("product/cart.html", context, resp.getWriter());
+        engine.process("product/checkout.html", context, resp.getWriter());
     }
 
     @Override
@@ -60,19 +57,22 @@ public class CartController extends HttpServlet {
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
 
-        String quantityString = req.getParameter("quantity");
-        productService.updateCart(req, quantityString);
+        Order order = new Order(productService.getProductsFromCart());
+        productService.addToOrder(order);
+        String name = req.getParameter("name");
+        String email = req.getParameter("email");
+        String mobile = req.getParameter("phoneNumber");
+        String country = req.getParameter("country");
+        String city = req.getParameter("city");
+        String zipcode = req.getParameter("zipcode");
+        String address = req.getParameter("address");
 
-        String productToRemoveFromCartIdString = req.getParameter("productId");
-        productService.removeProductFromCart(req, productToRemoveFromCartIdString);
+        productService.setOrderDetails(order, name, email, mobile, country, city, zipcode, address);
+        productService.saveOrderToJson(order);
 
-
-        context.setVariable("productsInCart", productService.getSingularProductsFromCart());
         context.setVariable("numberOfProductsInCart", productService.getProductsAmountFromCart());
-        context.setVariable("totalPrice", productService.getTotalPrice());
-        context.setVariable("productsAndQuantities", productService.getProductsAndQuantities());
 
-        engine.process("product/cart.html", context, resp.getWriter());
+        engine.process("product/category.html", context, resp.getWriter());
     }
 
 }

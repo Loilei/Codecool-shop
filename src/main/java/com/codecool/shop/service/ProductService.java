@@ -1,14 +1,16 @@
 package com.codecool.shop.service;
 
-import com.codecool.shop.dao.CartDao;
-import com.codecool.shop.dao.ProductCategoryDao;
-import com.codecool.shop.dao.ProductDao;
-import com.codecool.shop.dao.SupplierDao;
+import com.codecool.shop.dao.*;
+import com.codecool.shop.model.Order;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import jdk.jfr.Category;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,13 +21,19 @@ public class ProductService {
     private ProductCategoryDao productCategoryDao;
     private CartDao cartDao;
     private SupplierDao supplierDao;
+    private OrderDao orderDao;
+    private Gson gson = new GsonBuilder()
+            .setPrettyPrinting()
+            .serializeNulls()
+            .create();
 
     public ProductService(ProductDao productDao, ProductCategoryDao productCategoryDao,
-                          CartDao cartDao, SupplierDao supplierDao) {
+                          CartDao cartDao, SupplierDao supplierDao, OrderDao orderDao) {
         this.productDao = productDao;
         this.productCategoryDao = productCategoryDao;
         this.cartDao = cartDao;
         this.supplierDao = supplierDao;
+        this.orderDao = orderDao;
     }
 
     public ProductCategory getProductCategory(int categoryId) {
@@ -107,10 +115,27 @@ public class ProductService {
         }
     }
 
+    public void setOrderDetails(Order order, String name, String email, String mobile, String country, String city,
+                                String zipcode, String address) {
+        orderDao.setOrderDetails(order, name, email, mobile, country, city, zipcode, address);
+    }
+
     private void removeItemsFromCartbyId(int productId, Product product) {
         int numberOfRemovedItems = getProductsAndQuantities().get(product);
         for (int i = 0; i < numberOfRemovedItems; i++) {
             cartDao.remove(product);
         }
     }
+    public void addToOrder (Order order) {
+        orderDao.add(order);
+    }
+
+    public void saveOrderToJson (Order order) throws IOException {
+        String filePath = "C:\\Users\\marce\\Desktop\\test\\order_" + order.getId() + ".json";
+        FileWriter writer = new FileWriter(filePath);
+        gson.toJson(order, writer);
+        writer.flush();
+        writer.close();
+    }
+
 }
